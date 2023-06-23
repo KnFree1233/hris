@@ -1,0 +1,23 @@
+.sidebar-item {
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar-item li {
+  list-style-type: none;
+  padding: 1rem 2rem;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.sidebar-item:hover {
+  background-color: rgb(233, 233, 233);
+  border-radius: 5px;
+}
+
+.active {
+  background-color: #0cd383;
+  border-radius: 5px;
+  color: black;
+  pointer-events: none;
+}
