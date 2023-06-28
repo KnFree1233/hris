@@ -19,7 +19,7 @@ const Header = (props) => {
   return (
     <nav className={`${"navbar"} ${classes.header}`}>
       <div className="container-fluid">
-        <a className="navbar-brand">Human Resource Information System</a>
+        <a className="navbar-brand">Perworkmance</a>
         <div className="dropdown">
           <div
             className={`${NoHighlighted.noselect} ${"dropdown-toggle me-5"}`}
