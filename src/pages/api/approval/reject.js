@@ -1,8 +1,6 @@
-import { getSequelize } from "@/helpers/sequelize";
+import { sequelize } from "@/helpers/sequelize";
 
 export default async function handler(req, res) {
-  const sequelize = await getSequelize();
-
   if (req.method === "POST") {
     const id = req.body.id;
 

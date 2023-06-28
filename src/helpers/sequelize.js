@@ -9,6 +9,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: process.env.DIALECT,
+    port: process.env.DB_PORT,
     logging: console.log,
   }
 );
@@ -481,16 +482,16 @@ sequelize.sync().then(() => {
   console.log("Models synchronized");
 });
 
-export async function getSequelize() {
-  sequelize
-    .authenticate()
-    .then(() => {
-      console.log("Connection has been established successfully.");
-    })
-    .catch((error) => {
-      console.error("Unable to connect to the database:", error);
-    });
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database:", error);
+  });
 
+export async function getSequelize() {
   return sequelize;
 }
 

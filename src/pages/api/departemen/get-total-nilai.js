@@ -1,8 +1,6 @@
-import { getSequelize } from "@/helpers/sequelize";
+import { sequelize } from "@/helpers/sequelize";
 
 export default async function handler(req, res) {
-  const sequelize = await getSequelize();
-
   if (req.method === "GET") {
     const NilaiKaryawan = sequelize.models.nilaiKaryawan;
     const NilaiKpi = sequelize.models.nilaiKpi;

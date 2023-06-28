@@ -226,7 +226,7 @@ const EvaluasiForm = (props) => {
             return (
               <TableRow
                 key={item.kpiIndikatorId}
-                expandItem={item.deskripsi}
+                expandItem={item.kpiIndikator.deskripsi}
               >
                 <div className="col-8">{item.kpiIndikator.nama}</div>
                 <div className="col-2">

@@ -1,8 +1,7 @@
-import { getSequelize } from "@/helpers/sequelize";
+import { sequelize } from "@/helpers/sequelize";
 import { Op } from "sequelize";
 
 export default async function handler(req, res) {
-  const sequelize = await getSequelize();
 
   if (req.method === "GET") {
     const Karyawan = sequelize.models.karyawan;

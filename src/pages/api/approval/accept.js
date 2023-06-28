@@ -1,8 +1,6 @@
-import { getSequelize } from "@/helpers/sequelize";
+import { sequelize } from "@/helpers/sequelize";
 
 export default async function handler(req, res) {
-  const sequelize = await getSequelize();
-
   if (req.method === "POST") {
     const item = req.body.item;
 
@@ -31,7 +29,11 @@ export default async function handler(req, res) {
         await promosi.destroy();
       } else {
         karyawan.posisiId = item.posisiBaruId;
-        if (item.status === 1) karyawan.gaji = posisi.gajiDasar;
+        if (item.status === 1) {
+          if (karyawan.gaji < posisi.gajiDasar) {
+            karyawan.gaji = posisi.gajiDasar;
+          }
+        }
         karyawan.nilaiKaryawan.point = 0;
         await karyawan.save();
         await karyawan.nilaiKaryawan.save();
