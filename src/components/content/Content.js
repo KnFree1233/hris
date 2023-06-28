@@ -3,7 +3,7 @@ import classes from "./Content.module.css";
 
 const Content = (props) => {
   return (
-    <div className={`${classes.content} ${"row"}`}>
+    <div className={`${classes.content} ${"row mb-5"}`}>
       <div className="col-3 mt-5">
         <SideBar
           sidebarItemActive={props.sidebarItemActive}

@@ -33,15 +33,17 @@ const Evaluasiku = (props) => {
     });
     let data = await respone.json();
 
-    const tempKpi = data.nilaiKaryawan.nilaiKpi.map((item) => {
-      return { ...item.kpi };
-    });
+    const tempKpi = data.nilaiKaryawan
+      ? data.nilaiKaryawan.nilaiKpi.map((item) => {
+          return { ...item.kpi };
+        })
+      : [];
     setKpi(tempKpi);
 
     setKaryawan(data);
 
     getNilaiKpi(
-      data.nilaiKaryawan.id,
+      data.nilaiKaryawan ? data.nilaiKaryawan.id : 0,
       tempKpi.length !== 0 ? tempKpi[0].id : 0
     );
     getKehadiranBulan(
@@ -181,6 +183,9 @@ const Evaluasiku = (props) => {
                 columns={columns}
                 customStyles={customStlye}
                 data={kehadiranBulan}
+                striped
+                highlightOnHover
+                noDataComponent={"Tidak ada data"}
               />
             </div>
           </div>
@@ -210,7 +215,7 @@ const Evaluasiku = (props) => {
                       <div className="col-8">{item.kpiIndikator.nama}</div>
                       <div className="col-2">{item.nilai}</div>
                       <div className="col-2">
-                        {karyawan.posisi.nama === "Staff"
+                        {karyawan.posisi.nama.toLowerCase().includes("staff")
                           ? item.kpiIndikator.persentaseStaff
                           : item.kpiIndikator.persentaseManajer}
                         %
@@ -254,7 +259,10 @@ export const getServerSideProps = withIronSessionSsr(
           destination: "/login",
         },
       };
-    } else if (user.posisi.nama !== "Manajer" && user.posisi.nama !== "Staff") {
+    } else if (
+      !user.posisi.nama.toLowerCase().includes("manajer") &&
+      !user.posisi.nama.toLowerCase().includes("staff")
+    ) {
       return {
         redirect: {
           destination: "/",

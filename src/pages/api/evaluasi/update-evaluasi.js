@@ -15,10 +15,22 @@ export default async function handler(req, res) {
       res.status(500).json({ message: "Evaluasi Gagal disimpan", status: 0 });
     }
 
+    let message = "";
+
     try {
       let totalNilai = 0;
       nilaiKpi.nilaiIndikator.map((item) => {
-        if (req.body.posisi === "Staff") {
+        if (message !== "") return;
+        if (item.kpiIndikator.nama !== "Kehadiran") {
+          if (item.nilai > item.kpiIndikator.target) {
+            message = "Nilai tidak bisa melebihi target!";
+            return;
+          } else if (item.nilai < 0) {
+            message = "Nilai tidak bisa negatif!";
+            return;
+          }
+        }
+        if (req.body.posisi.toLowerCase().includes("staff")) {
           if (item.kpiIndikator.target === 0)
             totalNilai +=
               (item.nilai * item.kpiIndikator.persentaseStaff) / 100;
@@ -54,6 +66,11 @@ export default async function handler(req, res) {
           }
         }
       });
+
+      if (message !== "") {
+        res.status(400).json({ message: message, status: 0 });
+        return;
+      }
 
       let ratingId;
       if (totalNilai >= 90 && totalNilai <= 100) ratingId = 1;

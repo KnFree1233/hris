@@ -4,6 +4,9 @@ export default async function handler(req, res) {
   const sequelize = await getSequelize();
 
   if (req.method === "GET") {
+    const NilaiKaryawan = sequelize.models.nilaiKaryawan;
+    const NilaiKpi = sequelize.models.nilaiKpi;
+
     let departemen = await sequelize.models.departemen.findAll({
       raw: true,
     });
@@ -19,14 +22,31 @@ export default async function handler(req, res) {
             where: {
               departemenId: item.id,
             },
-            include: ["nilaiKaryawan"],
+            include: [
+              {
+                model: NilaiKaryawan,
+                include: [
+                  {
+                    model: NilaiKpi,
+                    as: "nilaiKpi",
+                    where: {
+                      status: true,
+                    },
+                  },
+                ],
+              },
+            ],
           });
 
         let totalNilai = 0;
 
         if (karyawanList) {
           karyawanList.map((item) => {
-            totalNilai += item.nilaiKaryawan.totalNilai;
+            if(item.nilaiKaryawan){
+              item.nilaiKaryawan.nilaiKpi.map((nilai) => {
+                totalNilai += nilai.totalNilai;
+              });
+            }
           });
         }
         const rataRata = (totalNilai / count).toFixed(2);

@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 import InputTextArea from "../ui/InputTextArea";
 
 const EvaluasiForm = (props) => {
-  const [kpiIndikator, setKpiIndikator] = useState([]);
+  const [kpiIndikator, setKpiIndikator] = useState(null);
   const [nilaiKpi, setNilaiKpi] = useState(null);
 
   const [feedback, setFeedback] = useState("");
@@ -39,10 +39,9 @@ const EvaluasiForm = (props) => {
           id: item.id,
           kpiId: item.kpiId,
           nama: item.nama,
-          persentase:
-            props.karyawan.posisi.nama === "Staff"
-              ? item.persentaseStaff
-              : item.persentaseManajer,
+          persentase: props.karyawan.posisi.nama.toLowerCase().includes("staff")
+            ? item.persentaseStaff
+            : item.persentaseManajer,
           target: item.target,
           nilai:
             item.nama === "Kehadiran"
@@ -107,6 +106,13 @@ const EvaluasiForm = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
+    if (nilaiKpi) {
+      if (nilaiKpi.status) {
+        alert("Nilai performa indikator sudah final!");
+        return;
+      }
+    }
+
     let response = null;
     let data = null;
 
@@ -161,7 +167,7 @@ const EvaluasiForm = (props) => {
         {!nilaiKpi && !kpiIndikator && (
           <div className="d-flex justify-content-center">
             <h4>
-              KPI tahun {dayjs().year() - 1} departemen{" "}
+              Performa indikator tahun {dayjs().year() - 1} departemen{" "}
               {props.karyawan.departemen.nama} belum dibuat
             </h4>
           </div>
@@ -220,7 +226,7 @@ const EvaluasiForm = (props) => {
             return (
               <TableRow
                 key={item.kpiIndikatorId}
-                expandItem={item.kpiIndikator.deskripsi}
+                expandItem={item.deskripsi}
               >
                 <div className="col-8">{item.kpiIndikator.nama}</div>
                 <div className="col-2">
@@ -273,7 +279,7 @@ const EvaluasiForm = (props) => {
                   )}
                 </div>
                 <div className="col-2">
-                  {props.karyawan.posisi.nama === "Staff"
+                  {props.karyawan.posisi.nama.toLowerCase().includes("staff")
                     ? item.kpiIndikator.persentaseStaff
                     : item.kpiIndikator.persentaseManajer}
                   %
@@ -282,14 +288,16 @@ const EvaluasiForm = (props) => {
             );
           })}
       </Table>
-      <div className="round-border mt-3">
-        <label className="form-label mt-2 ms-3">Feedback</label>
-        <InputTextArea
-          className="ps-3 pe-3 pb-3"
-          value={feedback}
-          onChange={(event) => feedbackChangeHandler(event)}
-        />
-      </div>
+      {(nilaiKpi || kpiIndikator) && (
+        <div className="round-border mt-3">
+          <label className="form-label mt-2 ms-3">Feedback</label>
+          <InputTextArea
+            className="ps-3 pe-3 pb-3"
+            value={feedback}
+            onChange={(event) => feedbackChangeHandler(event)}
+          />
+        </div>
+      )}
       <div className="row d-flex justify-content-center mt-3">
         <Button
           className="col-1 ms-1 me-1"

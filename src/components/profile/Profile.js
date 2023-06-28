@@ -14,7 +14,15 @@ const Profile = (props) => {
           <div className="col">
             <Text label="Email" text={props.email} />
             <Text label="Nomor Telepon" text={props.telp} />
-            <Text label="Gaji" text={"Rp" + props.gaji} />
+            <Text
+              label="Gaji"
+              text={
+                "Rp " +
+                Intl.NumberFormat("en-US").format(
+                  parseFloat(props.gaji).toFixed(2)
+                )
+              }
+            />
           </div>
         </div>
       </div>

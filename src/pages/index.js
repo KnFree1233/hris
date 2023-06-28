@@ -50,7 +50,7 @@ const Dashboard = (props) => {
     {
       name: "Persentase",
       selector: (row) =>
-        props.user.posisi.nama === "Staff"
+        props.user.posisi.nama.toLowerCase().includes("staff")
           ? row.kpiIndikator.persentaseStaff
           : row.kpiIndikator.persentaseManajer,
       sortable: true,
@@ -107,6 +107,9 @@ const Dashboard = (props) => {
                 columns={columns}
                 data={nilaiKpi ? nilaiKpi.nilaiIndikator : []}
                 customStyles={customStlye}
+                striped
+                highlightOnHover
+                noDataComponent={"Tidak ada data"}
               />
             </div>
           </div>
@@ -117,6 +120,9 @@ const Dashboard = (props) => {
               customStyles={customStlye}
               columns={columnsDepartemen}
               data={nilaiDepartemen}
+              striped
+              highlightOnHover
+              noDataComponent={"Tidak ada data"}
             />
           </div>
         </div>

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     const nik = req.body.nik;
 
     let kpi = await sequelize.models.kpi.findByPk(kpiId);
-    if(kpi){
+    if (kpi) {
       kpi = kpi.toJSON();
     }
 
@@ -48,11 +48,14 @@ export default async function handler(req, res) {
       let totalNilai = 0;
       nilaiKpi.nilaiIndikator = nilaiKpi.nilaiIndikator.map((item) => {
         let persen = 0;
-        if (req.body.posisi === "Staff")
+        if (req.body.posisi.toLowerCase().includes("staff"))
           persen = item.kpiIndikator.persentaseStaff;
-        else if (req.body.posisi === "Manajer")
+        else if (req.body.posisi.toLowerCase().includes("manajer"))
           persen = item.kpiIndikator.persentaseManajer;
         if (item.kpiIndikator.nama === "Kehadiran") {
+          if (kehadiranTahun.totalKehadiran > item.kpiIndikator.target) {
+            kehadiranTahun.totalKehadiran = item.kpiIndikator.target;
+          }
           totalNilai +=
             (kehadiranTahun.totalKehadiran / item.kpiIndikator.target) *
             100 *

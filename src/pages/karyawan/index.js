@@ -37,7 +37,9 @@ const Karyawan = (props) => {
     },
     {
       name: "Gaji",
-      selector: (row) => "Rp " + row.gaji,
+      selector: (row) =>
+        "Rp " +
+        Intl.NumberFormat("en-US").format(parseFloat(row.gaji).toFixed(2)),
       sortable: true,
     },
     {
@@ -192,6 +194,7 @@ const Karyawan = (props) => {
                 customStyles={customStlye}
                 striped
                 highlightOnHover
+                noDataComponent={"Tidak ada data"}
               />
             </div>
           </div>
@@ -208,6 +211,7 @@ const Karyawan = (props) => {
       <Modal isOpen={addModal} onRequestClose={addModalHandler}>
         <h2>Form Karyawan</h2>
         <KaryawanForm
+          posisi={props.user.posisi.nama}
           modalHandler={addModalHandler}
           currKaryawan={currKaryawan}
         />

@@ -8,10 +8,11 @@ const SideBar = (props) => {
       {(props.departemen === "HRD" || props.posisi === "Admin") && (
         <SidebarItem nama="Karyawan" active={props.sidebarItemActive} />
       )}
-      {(props.departemen === "HRD" || props.posisi === "Admin") && (
+      {props.posisi === "Admin" && (
         <SidebarItem nama="Departemen" active={props.sidebarItemActive} />
       )}
-      {(props.posisi === "Manajer" || props.posisi === "Admin") && (
+      {(props.posisi.toLowerCase().includes("manajer") ||
+        props.posisi === "Admin") && (
         <SidebarItem nama="Evaluasi" active={props.sidebarItemActive} />
       )}
       {(props.departemen === "HRD" || props.posisi === "Admin") && (
@@ -20,8 +21,12 @@ const SideBar = (props) => {
           active={props.sidebarItemActive}
         />
       )}
-      {(props.posisi === "Manajer" || props.posisi === "Staff") && (
+      {(props.posisi.toLowerCase().includes("manajer") ||
+        props.posisi.toLowerCase().includes("staff")) && (
         <SidebarItem nama="Evaluasiku" active={props.sidebarItemActive} />
+      )}
+      {props.posisi === "Admin" && (
+        <SidebarItem nama="Promosi" active={props.sidebarItemActive} />
       )}
     </ul>
   );

@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     const Kpi = sequelize.models.kpi;
     const Posisi = sequelize.models.posisi;
     const Departemen = sequelize.models.departemen;
+    const Rating = sequelize.models.rating;
 
     const whereItem = {};
     if (req.body.departemenId !== 0) {
@@ -20,7 +21,14 @@ export default async function handler(req, res) {
       whereItem["departemenId"] = req.body.departemenId;
     }
     if (req.body.departemenId === 0) {
-      whereItem["posisiId"] = 2;
+      whereItem["posisiId"] = {
+        [Op.gte]: 4,
+      };
+    }
+    else{
+      whereItem["posisiId"] = {
+        [Op.lte]: 3,
+      };
     }
 
     const karyawan = await sequelize.models.karyawan.findAll({
@@ -32,13 +40,18 @@ export default async function handler(req, res) {
             {
               model: NilaiKpi,
               as: "nilaiKpi",
-              include: {
-                model: Kpi,
-                where: {
-                  tahun: dayjs().year() - 1,
-                  // departemenId: req.body.departemenId,
+              include: [
+                {
+                  model: Kpi,
+                  where: {
+                    tahun: dayjs().year() - 1,
+                    // departemenId: req.body.departemenId,
+                  },
                 },
-              },
+                {
+                  model: Rating,
+                },
+              ],
             },
           ],
         },

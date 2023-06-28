@@ -15,10 +15,23 @@ export default async function handler(req, res) {
       res.status(500).json({ message: "Evaluasi Gagal disimpan", status: 0 });
     }
 
+    let message = "";
+
     try {
       let totalNilai = 0;
       const nilaiIndikator = req.body.kpiIndikator.map((item) => {
+        if (message !== "") return;
         //persentase sudah disesuaikan dengan posisi sebelum masuk API
+        if (item.nama !== "Kehadiran") {
+          if (item.nilai > item.target) {
+            message = "Nilai tidak bisa melebihi target!";
+            return;
+          } else if (item.nilai < 0) {
+            message = "Nilai tidak bisa negatif!";
+            return;
+          }
+        }
+
         if (item.target === 0)
           totalNilai += (item.nilai * item.persentase) / 100;
         else if (item.target > 0)
@@ -32,6 +45,11 @@ export default async function handler(req, res) {
 
         return { nilai: item.nilai, kpiIndikatorId: item.id };
       });
+
+      if (message !== "") {
+        res.status(400).json({ message: message, status: 0 });
+        return;
+      }
 
       let ratingId;
       if (totalNilai >= 90 && totalNilai <= 100) ratingId = 1;
@@ -52,8 +70,8 @@ export default async function handler(req, res) {
         return { ...item, nilaiKpiId: nilaiKpi.id };
       });
 
-      nilaiKaryawan.totalNilai += totalNilai;
-      await nilaiKaryawan.save();
+      // nilaiKaryawan.totalNilai += totalNilai;
+      // await nilaiKaryawan.save();
 
       await sequelize.models.nilaiIndikator.bulkCreate(temp);
     } catch (error) {

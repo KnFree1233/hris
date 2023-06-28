@@ -70,6 +70,8 @@ const Kpi = (props) => {
       name: "Performa Indikator",
       selector: (row) => row.nama,
       sortable: true,
+      grow: 3,
+      wrap: true,
     },
     {
       name: "Tahun",
@@ -84,7 +86,7 @@ const Kpi = (props) => {
     {
       name: "Status",
       selector: (row) =>
-        row.tahun < dayjs().year()+1 ? "Belum Selesai" : "Selesai",
+        row.tahun < dayjs().year() - 1 ? "Selesai" : "Belum Selesai",
       sortable: true,
     },
     {
@@ -140,6 +142,7 @@ const Kpi = (props) => {
             striped
             highlightOnHover
             customStyles={customStlye}
+            noDataComponent={"Tidak ada data"}
           />
         </div>
       </Content>

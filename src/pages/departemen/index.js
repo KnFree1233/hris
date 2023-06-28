@@ -125,6 +125,9 @@ const Departemen = (props) => {
             columns={columns}
             data={departemen}
             customStyles={customStlye}
+            striped
+            highlightOnHover
+            noDataComponent={"Tidak ada data"}
           />
         </div>
       </Content>
@@ -152,8 +155,7 @@ export const getServerSideProps = withIronSessionSsr(
         },
       };
     } else if (
-      user.departemen.nama !== "HRD" &&
-      user.departemen.nama !== "Admin"
+      user.posisi.nama !== "Admin"
     ) {
       return {
         redirect: {

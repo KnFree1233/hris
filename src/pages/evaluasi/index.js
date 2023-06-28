@@ -9,6 +9,7 @@ import ReviewIcon from "../../assets/review-icon.png";
 import EvaluasiForm from "@/components/evaluasi/EvaluasiForm";
 import dayjs from "dayjs";
 import DataTable from "react-data-table-component";
+import Button from "@/components/ui/Button";
 
 const Evaluasi = (props) => {
   const [isModal, setIsModal] = useState(false);
@@ -59,6 +60,22 @@ const Evaluasi = (props) => {
     const data = await response.json();
 
     setCurrKpi(data);
+  };
+
+  const finalize = async () => {
+    const response = await fetch("/api/evaluasi/finalize", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        karyawan: karyawan,
+      }),
+    });
+    const data = await response.json();
+
+    alert(data.message);
+    getEvaluasi();
   };
 
   useEffect(() => {
@@ -135,6 +152,7 @@ const Evaluasi = (props) => {
                 striped={true}
                 highlightOnHover
                 customStyles={customStlye}
+                noDataComponent={"Tidak ada data"}
               />
             </div>
           </div>
@@ -157,10 +175,16 @@ const Evaluasi = (props) => {
                 striped={true}
                 highlightOnHover
                 customStyles={customStlye}
+                noDataComponent={"Tidak ada data"}
               />
             </div>
           </div>
         )}
+        <div className="mt-4 d-flex justify-content-center">
+          <Button type="button" onClick={finalize}>
+            Final Submit
+          </Button>
+        </div>
       </Content>
       <Modal isOpen={isModal} onRequestClose={isModalHandler}>
         {props.user.posisi.nama !== "Admin" && (
@@ -173,6 +197,7 @@ const Evaluasi = (props) => {
         )}
         {props.user.posisi.nama === "Admin" && (
           <EvaluasiForm
+            posisi={props.user.posisi.nama}
             karyawan={currKaryawan}
             departemenId={currKaryawan.departemenId}
             modalHandler={isModalHandler}
@@ -193,7 +218,10 @@ export const getServerSideProps = withIronSessionSsr(
           destination: "/login",
         },
       };
-    } else if (user.posisi.nama !== "Manajer" && user.posisi.nama !== "Admin") {
+    } else if (
+      !user.posisi.nama.toLowerCase().includes("manajer") &&
+      user.posisi.nama !== "Admin"
+    ) {
       return {
         redirect: {
           destination: "/",

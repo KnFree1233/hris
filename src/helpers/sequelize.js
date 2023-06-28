@@ -44,6 +44,9 @@ const Posisi = sequelize.define(
     nama: {
       type: DataTypes.STRING,
     },
+    gajiDasar: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     tableName: "posisi",
@@ -167,9 +170,45 @@ const Rating = sequelize.define(
     nama: {
       type: DataTypes.INTEGER,
     },
+    kenaikanGaji: {
+      type: DataTypes.INTEGER,
+    },
+    point: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     tableName: "rating",
+    timestamps: false,
+  }
+);
+
+const Promosi = sequelize.define(
+  "promosi",
+  {
+    id: {
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    karyawanNik: {
+      type: DataTypes.STRING,
+    },
+    message: {
+      type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.INTEGER,
+    },
+    posisiBaruId: {
+      type: DataTypes.BIGINT,
+    },
+    finalize: {
+      type: DataTypes.BOOLEAN,
+    },
+  },
+  {
+    tableName: "promosi",
     timestamps: false,
   }
 );
@@ -192,6 +231,9 @@ const NilaiKaryawan = sequelize.define(
       type: DataTypes.FLOAT,
     },
     ratingId: {
+      type: DataTypes.BIGINT,
+    },
+    point: {
       type: DataTypes.BIGINT,
     },
   },
@@ -223,6 +265,9 @@ const NilaiKpi = sequelize.define(
     },
     feedback: {
       type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
     },
   },
   {
@@ -364,6 +409,9 @@ Karyawan.hasMany(KehadiranTahun, {
   foreignKey: "karyawanNik",
   as: "kehadiranTahun",
 });
+Karyawan.hasOne(Promosi, {
+  foreignKey: "karyawanNik",
+});
 
 Kpi.hasMany(KpiIndikator, {
   foreignKey: "kpiId",
@@ -392,6 +440,8 @@ Rating.hasMany(NilaiKpi, {
   foreignKey: "ratingId",
   as: "nilaiKpi",
 });
+
+Promosi.belongsTo(Karyawan);
 
 NilaiKaryawan.hasMany(NilaiKpi, {
   foreignKey: "nilaiKaryawanId",

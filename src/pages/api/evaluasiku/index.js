@@ -28,6 +28,7 @@ export default async function handler(req, res) {
     let nilaiKpi = await NilaiKpi.findOne({
       where: {
         nilaiKaryawanId: karyawan.nilaiKaryawan.id,
+        status: true,
       },
       include: [
         {
@@ -62,8 +63,7 @@ export default async function handler(req, res) {
     let totalNilai = 0;
     nilaiKpi.nilaiIndikator = nilaiKpi.nilaiIndikator.map((item) => {
       let persen = 0;
-      if (posisi === "Staff")
-        persen = item.kpiIndikator.persentaseStaff;
+      if (posisi === "Staff") persen = item.kpiIndikator.persentaseStaff;
       else if (posisi === "Manajer")
         persen = item.kpiIndikator.persentaseManajer;
       if (item.kpiIndikator.nama === "Kehadiran") {

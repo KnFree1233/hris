@@ -112,8 +112,6 @@ const KaryawanForm = (props) => {
 
     const data = await response.json();
 
-    console.log(data);
-
     alert(data.message);
 
     if (data.status === 1) {
@@ -154,6 +152,7 @@ const KaryawanForm = (props) => {
         <div className="col-6">
           <label className="form-label">Departemen</label>
           <InputSelect
+            disabled={props.posisi !== "Admin" && props.currKaryawan !== null}
             defaultValue={departemenId}
             onChange={departemenIdChangeHandler}
           >
@@ -168,7 +167,11 @@ const KaryawanForm = (props) => {
         </div>
         <div className="col-6">
           <label className="form-label">Posisi</label>
-          <InputSelect defaultValue={posisiId} onChange={posisiIdChangeHandler}>
+          <InputSelect
+            defaultValue={posisiId}
+            onChange={posisiIdChangeHandler}
+            disabled={props.posisi !== "Admin" && props.currKaryawan !== null}
+          >
             {posisi.map((item) => {
               return (
                 <option key={item.id} value={item.id}>
@@ -185,6 +188,7 @@ const KaryawanForm = (props) => {
           <div className="row">
             <label className="col-1">Rp</label>
             <InputText
+              disabled={props.posisi !== "Admin" && props.currKaryawan !== null}
               className="col-11"
               placeholder=""
               type="number"
@@ -206,7 +210,11 @@ const KaryawanForm = (props) => {
       {props.currKaryawan && (
         <div className="mb-3">
           <label className="form-label">Status</label>
-          <InputSelect defaultValue={status} onChange={statusChangeHandler}>
+          <InputSelect
+            defaultValue={status}
+            onChange={statusChangeHandler}
+            disabled={props.posisi !== "Admin" && props.currKaryawan !== null}
+          >
             <option value={true}>Aktif</option>
             <option value={false}>Tidak Aktif</option>
           </InputSelect>

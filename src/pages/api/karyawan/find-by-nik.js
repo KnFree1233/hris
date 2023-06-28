@@ -3,7 +3,7 @@ import { getSequelize } from "@/helpers/sequelize";
 export default async function handler(req, res) {
   const sequelize = await getSequelize();
 
-  if(req.method === "POST"){
+  if (req.method === "POST") {
     const NilaiKaryawan = sequelize.models.nilaiKaryawan;
     const NilaiKpi = sequelize.models.nilaiKpi;
     const NilaiIndikator = sequelize.models.nilaiIndikator;
@@ -27,8 +27,8 @@ export default async function handler(req, res) {
             {
               model: NilaiKpi,
               as: "nilaiKpi",
-              attributes: {
-                exclude: ["nilaiKaryawanId"],
+              where: {
+                status: true,
               },
               include: [
                 {

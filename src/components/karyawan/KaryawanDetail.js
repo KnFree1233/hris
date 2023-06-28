@@ -6,6 +6,7 @@ import InputSelect from "@/components/ui/InputSelect";
 import dayjs from "dayjs";
 import { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import InputTextArea from "../ui/InputTextArea";
 
 const KaryawanDetail = (props) => {
   const [karyawan, setKaryawan] = useState({});
@@ -29,15 +30,17 @@ const KaryawanDetail = (props) => {
     });
     let data = await respone.json();
 
-    const tempKpi = data.nilaiKaryawan.nilaiKpi.map((item) => {
-      return { ...item.kpi };
-    });
+    const tempKpi = data.nilaiKaryawan
+      ? data.nilaiKaryawan.nilaiKpi.map((item) => {
+          return { ...item.kpi };
+        })
+      : [];
     setKpi(tempKpi);
 
     setKaryawan(data);
 
     getNilaiKpi(
-      data.nilaiKaryawan.id,
+      data.nilaiKaryawan ? data.nilaiKaryawan.id : 0,
       tempKpi.length !== 0 ? tempKpi[0].id : 0
     );
     getKehadiranBulan(
@@ -168,6 +171,9 @@ const KaryawanDetail = (props) => {
               columns={columns}
               customStyles={customStlye}
               data={kehadiranBulan}
+              highlightOnHover
+              striped
+              noDataComponent={"Tidak ada data"}
             />
           </div>
         </div>
@@ -197,7 +203,7 @@ const KaryawanDetail = (props) => {
                     <div className="col-8">{item.kpiIndikator.nama}</div>
                     <div className="col-2">{item.nilai}</div>
                     <div className="col-2">
-                      {karyawan.posisi.nama === "Staff"
+                      {karyawan.posisi.nama.toLowerCase().includes("staff")
                         ? item.kpiIndikator.persentaseStaff
                         : item.kpiIndikator.persentaseManajer}
                       %
@@ -215,6 +221,14 @@ const KaryawanDetail = (props) => {
             </TableHeader>
           </Table>
         </div>
+      </div>
+      <div className="round-border mt-3">
+        <label className="form-label mt-2 ms-3">Feedback</label>
+        <InputTextArea
+          className="ps-3 pe-3 pb-3"
+          value={nilaiKpi ? nilaiKpi.feedback : ""}
+          disabled={true}
+        />
       </div>
     </Fragment>
   );
