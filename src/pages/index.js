@@ -102,7 +102,8 @@ const Dashboard = (props) => {
               <Absensi nik={props.user.nik} />
             </div>
             <div className="col-7 round-border">
-              <h4 className="mt-1">{nilaiKpi ? nilaiKpi.kpi.nama : ""}</h4>
+              <h4 className="mt-1">Evaluasi Terbaru</h4>
+              <div className="mt-1">{nilaiKpi ? nilaiKpi.kpi.nama : ""}</div>
               <DataTable
                 columns={columns}
                 data={nilaiKpi ? nilaiKpi.nilaiIndikator : []}
