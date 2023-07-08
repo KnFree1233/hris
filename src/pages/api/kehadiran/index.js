@@ -48,11 +48,14 @@ export default async function handler(req, res) {
       res.status(200).json({ message: "Berhasil Check In", status: 1 });
       return;
     } else if (req.body.checkOut) {
-      const currDate = dayjs(new Date());
+      const currDate = dayjs();
+      const checkoutTime = dayjs("17:00:00", "HH:mm:ss");
       const time = currDate.format("HH:mm:ss");
 
-      if (1 !== 1) {
-        res.status(200).json({ message: "Belum melebihi pukul 17", status: 0 });
+      if (currDate < checkoutTime) {
+        res
+          .status(200)
+          .json({ message: "Check out harus setelah pukul 17", status: 0 });
         return;
       } else {
         const day = currDate.format("D");
@@ -90,8 +93,8 @@ export default async function handler(req, res) {
         const checkoutValue = dayjs(kehadiranHari.checkOut, "HH:mm:ss");
         const result = checkoutValue.diff(checkinValue, "h");
 
-        dayjs(kehadiranHari.checkIn, "HH:mm:ss") <=
-          dayjs("09:00:00", "HH:mm:ss")
+        // dayjs(kehadiranHari.checkIn, "HH:mm:ss") <=
+        //   dayjs("09:00:00", "HH:mm:ss")
         if (result >= 8) {
           kehadiranHari.status = true;
           kehadiranBulan.totalKehadiran += 1;
