@@ -144,7 +144,7 @@ const KpiForm = (props) => {
                 views={["year"]}
                 defaultValue={dayjs(tahunKpi)}
                 onChange={(tahun) => tahunKpiChangeHandler(tahun.year())}
-                label="Tahun KPI"
+                label="Tahun PI"
               />
             </div>
             <div className="col-6">
