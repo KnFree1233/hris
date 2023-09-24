@@ -24,9 +24,19 @@ export default async function handler(req, res) {
       );
 
       if (item.status === -1) {
-        karyawan.status = false;
-        await karyawan.save();
-        await promosi.destroy();
+        if (item.posisiBaruId === "-1") {
+          karyawan.status = false;
+          await karyawan.save();
+          await promosi.destroy();
+        } else {
+          karyawan.posisiId = item.posisiBaruId;
+          karyawan.nilaiKaryawan.point = 0;
+          await karyawan.save();
+          await karyawan.nilaiKaryawan.save();
+
+          promosi.finalize = true;
+          await promosi.save();
+        }
       } else {
         karyawan.posisiId = item.posisiBaruId;
         if (item.status === 1) {

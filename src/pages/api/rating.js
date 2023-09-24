@@ -16,9 +16,9 @@ export default async function handler(req, res) {
     ratings.map((item) => {
       if (message !== "") return;
 
-      if (item.kenaikanGaji < 0) {
-        message = "Persentase kenaikan gaji tidak bisa negatif!";
-      }
+      // if (item.kenaikanGaji < 0) {
+      //   message = "Persentase kenaikan gaji tidak bisa negatif!";
+      // }
     });
 
     if (message !== "") {
